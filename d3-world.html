@@ -105,18 +105,120 @@
 		{"country":"Slovenia", "alcohol": 15.19,"cigarettes": 2369},
 		{"country":"Serbia", "alcohol": 11.09,"cigarettes": 2869}];
 
-		var nodes = data;
-		var force = d3.layout.force()
-		.nodes(nodes)
-		.size([width,height])
-		.on("tick", tick);
-		var start = force.start();
-		console.log(start);
-		function tick(e) {
-			console.log("he", e);
-		}
+// prep data
+	Array.prototype.max = function() {
+	  return Math.max.apply(null, this);
+	};
+
+	Array.prototype.min = function() {
+	  return Math.min.apply(null, this);
+	};
+
+	var pie = 99;
+
+	var prostitution_array = data.map(function(o) { return o.prostitution; }).filter(Boolean);
+	var alcohol_array = data.map(function(o) { return o.alcohol; }).filter(Boolean);
+	var cigarette_array = data.map(function(o) { return o.cigarettes; }).filter(Boolean);
+
+	var prostitution_min = prostitution_array.min();
+	var alcohol_min = alcohol_array.min();
+	var cigarette_min = cigarette_array.min();
+
+	data.forEach(function(d) {
+		if (!d.prostitution) { d.prostitution = prostitution_array.min() };
+		if (!d.alcohol) { d.alcohol = d.alcohol_array.min() };
+		if (!d.cigarettes) { d.cigarettes = d.cigarette_array.min() };
+	});
+
+	var prostitution_scale = d3.scale.linear()
+	.domain([prostitution_array.min(), prostitution_array.max()])
+	.range([.1, pie/3]);
+
+	var alcohol_scale = d3.scale.linear()
+	.domain([alcohol_array.min(), alcohol_array.max()])
+	.range([.1, pie/3]);
+
+	var cigarette_scale = d3.scale.linear()
+	.domain([cigarette_array.min(), cigarette_array.max()])
+	.range([.1, pie/3]);
+
+	data.map(function(country) { 
+		return country.rank = prostitution_scale(country.prostitution) + alcohol_scale(country.alcohol) +  cigarette_scale(country.cigarettes);
+	});
+
+	var rank_array = data.map(function(d) { return d.rank });
+
+	// good to go, initialize the force
+	var pie = d3.layout.pie()
+	  .value(function(d) {
+	    return d;
+	  }).sort(null);
+	
+	var arc = d3.svg.arc()
+	  .innerRadius(function(d, i) { console.log(d, i); return (33 * .6) })
+	  .outerRadius(function(d) { return 33; });
+
+	var fill = d3.scale.linear()
+		.domain([0, 2])
+		.range(["red", "blue"]);
+
+	var force = d3.layout.force()
+		.nodes(data)
+		.size([width + 250, height + 50])
+		.on("tick", tick)
+		.charge(charge)
+		.gravity(.15);
+
+		force.start();
+
+	function charge(d) {
+		return d.rank * d.rank * -.25;
+	}
+	var svg = d3.select("body").append("svg")
+		.attr("width", width + 250)
+		.attr("height", height + 50);
+
+	var nodes = svg.selectAll(".node")
+		.data(data)
+		.enter()
+		.append("g")
+		.attr("class", "node");
+		// .attr("cx", function(d) { return d.x; })
+  // 	.attr("cy", function(d) { return d.y; })
+  // 	.attr("r", function(d) { return d.rank; })
+  nodes.selectAll("path")
+  	.data(function(d) { 
+  		var ar = []; 
+  		ar.push(prostitution_scale(d.prostitution)); 
+  		ar.push(cigarette_scale(d.cigarettes));
+  		ar.push(alcohol_scale(d.alcohol));
+  		return pie(ar); 
+  	})
+  	.enter()
+  	.append("svg:path")
+  	.attr("d", arc)
+  	.style("fill", function(d, i) { return fill(i); })
+  	.style("stroke", function(d, i) { return d3.rgb(fill(d.value)).darker(2); })
+  	.call(force.drag);
+
+  nodes.append("text")
+  	.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+     .attr("dy", ".35em")
+     .style("text-anchor", "middle")
+     .text(function(d) { return d.country; });
+
+  svg.style("opacity", 1e-6)
+  	  .transition()
+  	  .duration(800)
+  	  .style("opacity", 1);
+
+	function tick() {
+		// nodes.attr("cx", function(d) { return d.x; })
+  // 	.attr("cy", function(d) { return d.y; });
+  	nodes.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+	}
+
 // 	data.forEach(function(d) { d.rank = 0 });
-// 	console.log(data);
 // 	var prostitution_array = [],
 // 	alcohol_array = [],
 // 	cigarette_array = [];
@@ -177,10 +279,19 @@
 // 	for (i=0;i<data.length;i++){
 // 		data[i].country
 // 	}
+
+		// var nodes = data;
+		// var force = d3.layout.force()
+		// .nodes(nodes)
+		// .size([width,height])
+		// .on("tick", tick)
+		// .start();
+
+		// function tick(e) {
+		// 	console.log("he", e);
+		// }
 // console.log(countries);
-// 	var svg = d3.select("body").append("svg")
-// 	.attr("width", width + 200)
-// 	.attr("height", height);
+
 
 // 	var circles = svg.selectAll("circle")
 // 	.data(data)
