@@ -154,9 +154,9 @@
 	    return d;
 	  }).sort(null);
 	
-	var arc = d3.svg.arc()
-	  .innerRadius(function(d, i) { console.log(d, i); return (33 * .6) })
-	  .outerRadius(function(d) { return 33; });
+	var arc = d3.svg.arc();
+	  // .innerRadius(function(d, i) { console.log(d, i); return (d.maxVal * .6) })
+	  // .outerRadius(function(d) { return d.maxVal; });
 
 	var fill = d3.scale.linear()
 		.domain([0, 2])
@@ -167,7 +167,7 @@
 		.size([width + 250, height + 50])
 		.on("tick", tick)
 		.charge(charge)
-		.gravity(.15);
+		.gravity(.16);
 
 		force.start();
 
@@ -177,6 +177,18 @@
 	var svg = d3.select("body").append("svg")
 		.attr("width", width + 250)
 		.attr("height", height + 50);
+
+	var g1 = svg.append("g").attr("transform", "translate(20, 20)");
+	var g2 = svg.append("g").attr("transform", "translate(20, 520)");
+	var g3 = svg.append("g").attr("transform", "translate(550, 20)");
+
+	g1.append("circle").attr("r", 10).attr("fill", "red");
+	g2.append("circle").attr("r", 10).attr("fill", "purple");
+	g3.append("circle").attr("r", 10).attr("fill", "blue");
+	g1.append("text").text("Prostitution").attr("transform", "translate(14,6)");
+	g2.append("text").text("Cigarettes").attr("transform", "translate(14,6)");
+	g3.append("text").text("Alcohol").attr("transform", "translate(14,6)");
+
 
 	var nodes = svg.selectAll(".node")
 		.data(data)
@@ -192,11 +204,15 @@
   		ar.push(prostitution_scale(d.prostitution)); 
   		ar.push(cigarette_scale(d.cigarettes));
   		ar.push(alcohol_scale(d.alcohol));
-  		return pie(ar); 
+  		var segments = pie(ar),
+  		maxValue = d3.max(segments, function(d) { return d.value; });
+  		    segments.forEach(function(d) { d.maxVal = maxValue; });
+	    return segments; 
   	})
   	.enter()
   	.append("svg:path")
-  	.attr("d", arc)
+  	.attr("d", arc.innerRadius(function(d) { return d.maxVal * 1.2; })
+              .outerRadius(function(d) { return d.maxVal * 2; }))
   	.style("fill", function(d, i) { return fill(i); })
   	.style("stroke", function(d, i) { return d3.rgb(fill(d.value)).darker(2); })
   	.call(force.drag);
