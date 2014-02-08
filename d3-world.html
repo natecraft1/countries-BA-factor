@@ -77,33 +77,33 @@
 
 
 
-	var data = [{ "country": "Spain", "prostitution": 73, "alcohol": 11.62,"cigarettes": 1757},
-		{"country": "Japan", "prostitution": 26.5,"alcohol": 8.03,"cigarettes": 1841},
-		{"country":"China", "prostitution": 24, "alcohol": 5.91,"cigarettes": 1711},
-		{"country": "Germany", "prostitution": 18,"alcohol": 12.81,"cigarettes": 1045},
-		{"country":"United States", "prostitution": 14.6,"alcohol": 9.44,"cigarettes": 1028},
-		{"country":"South Korea", "prostitution": 12,"alcohol": 14.8,"cigarettes": 1958},
-		{"country":"India", "prostitution": 8.4, "alcohol": .75,"cigarettes": 96},
-		{"country":"Thailand", "prostitution": 6.4,"alcohol": 7.08,"cigarettes": 560},
-		{"country":"Philippines", "prostitution": 6, "alcohol": 6.38,"cigarettes": 838},
-		{"country":"Switzerland", "prostitution": 4.4, "alcohol": 11.06,"cigarettes": 1722},
-		{"country":"Turkey", "prostitution": 4,"alcohol": 2.87,"cigarettes": 1399},
-		{"country":"Indonesia", "prostitution": 2.25, "alcohol": .59,"cigarettes": 1085},
-		{"country":"Ukraine", "prostitution": 1.5, "alcohol": 15.6,"cigarettes": 2401},
-		{"country":"Bulgaria", "prostitution": 1.3, "alcohol": 12.44,"cigarettes": 2822},
-		{"country":"United Kingdom", "prostitution": 1,"alcohol": 13.37,"cigarettes": 750},
-		{"country":"Malaysia", "prostitution": .96, "alcohol": .82,"cigarettes": 539},
-		{"country":"Netherlands", "prostitution": .8,"alcohol": 10.05,"cigarettes": 801},
-		{"country":"Italy", "prostitution": .6,"alcohol": 10.68,"cigarettes": 1475},
-		{"country":"Russia", "prostitution": .54,"alcohol": 15.76,"cigarettes": 2786},
-		{"country":"Cambodia", "prostitution": .51,"alcohol": 4.77,"cigarettes": 452},
-		{"country":"Israel", "prostitution": .5,"alcohol": 2.89,"cigarettes": 1037},
-		{"country":"Ireland", "prostitution": .33,"alcohol": 14.41,"cigarettes": 1006},
-		{"country":"Czech Republic", "prostitution": .2,"alcohol": 16.45,"cigarettes": 2125},
-		{"country":"Jamaica", "prostitution": .06,"alcohol": 5,"cigarettes": 283},
-		{"country":"Australia", "prostitution": .03, "alcohol": 10,"cigarettes": 1034},
-		{"country":"Slovenia", "alcohol": 15.19,"cigarettes": 2369},
-		{"country":"Serbia", "alcohol": 11.09,"cigarettes": 2869}];
+	var data = [{ "country": "Spain", "prostitution": 73, "alcohol": 11.62,"cigarettes": 1757, "homicide": .8},
+		{"country": "Japan", "prostitution": 26.5,"alcohol": 8.03,"cigarettes": 1841, "homicide": .3},
+		{"country":"China", "prostitution": 24, "alcohol": 5.91,"cigarettes": 1711, "homicide": 1},
+		{"country": "Germany", "prostitution": 18,"alcohol": 12.81,"cigarettes": 1045, "homicide":.8},
+		{"country":"United States", "prostitution": 14.6,"alcohol": 9.44,"cigarettes": 1028, "homicide": 4.7},
+		{"country":"South Korea", "prostitution": 12,"alcohol": 14.8,"cigarettes": 1958, "homicide": 2.6},
+		{"country":"India", "prostitution": 8.4, "alcohol": .75,"cigarettes": 96, "homicide": 3.5},
+		{"country":"Thailand", "prostitution": 6.4,"alcohol": 7.08,"cigarettes": 560, "homicide": 4.8},
+		{"country":"Philippines", "prostitution": 6, "alcohol": 6.38,"cigarettes": 838, "homicide": 5.4},
+		{"country":"Switzerland", "prostitution": 4.4, "alcohol": 11.06,"cigarettes": 1722, "homicide": .7},
+		{"country":"Turkey", "prostitution": 4,"alcohol": 2.87,"cigarettes": 1399, "homicide": 3.3},
+		{"country":"Indonesia", "prostitution": 2.25, "alcohol": .59,"cigarettes": 1085, "homicide": 8.1},
+		{"country":"Ukraine", "prostitution": 1.5, "alcohol": 15.6,"cigarettes": 2401, "homicide": 5.2},
+		{"country":"Bulgaria", "prostitution": 1.3, "alcohol": 12.44,"cigarettes": 2822, "homicide": 2},
+		{"country":"United Kingdom", "prostitution": 1,"alcohol": 13.37,"cigarettes": 750, "homicide": 1.2},
+		{"country":"Malaysia", "prostitution": .96, "alcohol": .82,"cigarettes": 539, "homicide": 2.3},
+		{"country":"Netherlands", "prostitution": .8,"alcohol": 10.05,"cigarettes": 801, "homicide": 1.1},
+		{"country":"Italy", "prostitution": .6,"alcohol": 10.68,"cigarettes": 1475, "homicide": .9},
+		{"country":"Russia", "prostitution": .54,"alcohol": 15.76,"cigarettes": 2786, "homicide": 9.7},
+		{"country":"Cambodia", "prostitution": .51,"alcohol": 4.77,"cigarettes": 452, "homicide": 3.4},
+		{"country":"Israel", "prostitution": .5,"alcohol": 2.89,"cigarettes": 1037, "homicide": 2.1},
+		{"country":"Ireland", "prostitution": .33,"alcohol": 14.41,"cigarettes": 1006, "homicide": 1.2},
+		{"country":"Czech Republic", "prostitution": .2,"alcohol": 16.45,"cigarettes": 2125, "homicide": .8},
+		{"country":"Jamaica", "prostitution": .06,"alcohol": 5,"cigarettes": 283, "homicide": 40.9},
+		{"country":"Australia", "prostitution": .03, "alcohol": 10,"cigarettes": 1034, "homicide": 1},
+		{"country":"Slovenia", "alcohol": 15.19,"cigarettes": 2369, "homicide": .7},
+		{"country":"Serbia", "alcohol": 11.09,"cigarettes": 2869, "homicide": 1.2}];
 
 // prep data
 	Array.prototype.max = function() {
@@ -114,15 +114,17 @@
 	  return Math.min.apply(null, this);
 	};
 
-	var pie = 99;
+	var pie = 100;
 
 	var prostitution_array = data.map(function(o) { return o.prostitution; }).filter(Boolean);
 	var alcohol_array = data.map(function(o) { return o.alcohol; }).filter(Boolean);
 	var cigarette_array = data.map(function(o) { return o.cigarettes; }).filter(Boolean);
+	var homicide_array = data.map(function(o) { return o.homicide; }).filter(Boolean);
 
 	var prostitution_min = prostitution_array.min();
 	var alcohol_min = alcohol_array.min();
 	var cigarette_min = cigarette_array.min();
+	var homicide_min = homicide_array.min();
 
 	data.forEach(function(d) {
 		if (!d.prostitution) { d.prostitution = prostitution_array.min() };
@@ -131,19 +133,23 @@
 	});
 
 	var prostitution_scale = d3.scale.linear()
-	.domain([prostitution_array.min(), prostitution_array.max()])
-	.range([.1, pie/3]);
+	.domain([prostitution_min, prostitution_array.max()])
+	.range([.1, pie/4]);
 
 	var alcohol_scale = d3.scale.linear()
-	.domain([alcohol_array.min(), alcohol_array.max()])
-	.range([.1, pie/3]);
+	.domain([alcohol_min, alcohol_array.max()])
+	.range([.1, pie/4]);
 
 	var cigarette_scale = d3.scale.linear()
-	.domain([cigarette_array.min(), cigarette_array.max()])
-	.range([.1, pie/3]);
+	.domain([cigarette_min, cigarette_array.max()])
+	.range([.1, pie/4]);
+
+	var homicide_scale = d3.scale.linear()
+	.domain([homicide_min, homicide_array.max()])
+	.range([.1, pie/4])
 
 	data.map(function(country) { 
-		return country.rank = prostitution_scale(country.prostitution) + alcohol_scale(country.alcohol) +  cigarette_scale(country.cigarettes);
+		return country.rank = prostitution_scale(country.prostitution) + alcohol_scale(country.alcohol) +  cigarette_scale(country.cigarettes) + homicide_scale(country.homicide);
 	});
 
 	var rank_array = data.map(function(d) { return d.rank });
@@ -155,19 +161,17 @@
 	  }).sort(null);
 	
 	var arc = d3.svg.arc();
-	  // .innerRadius(function(d, i) { console.log(d, i); return (d.maxVal * .6) })
-	  // .outerRadius(function(d) { return d.maxVal; });
-
-	var fill = d3.scale.linear()
-		.domain([0, 2])
-		.range(["red", "blue"]);
+	
+	var fill = d3.scale.ordinal()
+		.domain([0, 3])
+		.range(["red", "yellow", "blue", "green"]);
 
 	var force = d3.layout.force()
 		.nodes(data)
 		.size([width + 250, height + 50])
 		.on("tick", tick)
 		.charge(charge)
-		.gravity(.16);
+		.gravity(.14);
 
 		force.start();
 
@@ -181,38 +185,45 @@
 	var g1 = svg.append("g").attr("transform", "translate(20, 20)");
 	var g2 = svg.append("g").attr("transform", "translate(20, 520)");
 	var g3 = svg.append("g").attr("transform", "translate(550, 20)");
+	var g4 = svg.append("g").attr("transform", "translate(550, 520)");
 
 	g1.append("circle").attr("r", 10).attr("fill", "red");
-	g2.append("circle").attr("r", 10).attr("fill", "purple");
+	g2.append("circle").attr("r", 10).attr("fill", "green");
 	g3.append("circle").attr("r", 10).attr("fill", "blue");
-	g1.append("text").text("Prostitution").attr("transform", "translate(14,6)");
-	g2.append("text").text("Cigarettes").attr("transform", "translate(14,6)");
-	g3.append("text").text("Alcohol").attr("transform", "translate(14,6)");
+	g4.append("circle").attr("r", 10).attr("fill", "yellow");
 
+
+	g1.append("text").text("Prostitution").attr("transform", "translate(14,6)");
+	g2.append("text").text("Alcohol").attr("transform", "translate(14,6)");
+	g3.append("text").text("Cigarettes").attr("transform", "translate(14,6)");
+	g4.append("text").text("Homicide").attr("transform", "translate(14,6)");
+
+	console.log(data);
 
 	var nodes = svg.selectAll(".node")
 		.data(data)
 		.enter()
 		.append("g")
 		.attr("class", "node");
-		// .attr("cx", function(d) { return d.x; })
-  // 	.attr("cy", function(d) { return d.y; })
-  // 	.attr("r", function(d) { return d.rank; })
+
   nodes.selectAll("path")
-  	.data(function(d) { 
+  	.data(function(d, i) { 
+  		console.log(i);
   		var ar = []; 
   		ar.push(prostitution_scale(d.prostitution)); 
   		ar.push(cigarette_scale(d.cigarettes));
   		ar.push(alcohol_scale(d.alcohol));
+  		ar.push(homicide_scale(d.homicide));
   		var segments = pie(ar),
-  		maxValue = d3.max(segments, function(d) { return d.value; });
-  		    segments.forEach(function(d) { d.maxVal = maxValue; });
+  		// maxValue = d3.max(segments, function(d) { return d.value; });
+  			dRank = data[i].rank;
+  		    segments.forEach(function(d) { d.dRank = dRank; });
 	    return segments; 
   	})
   	.enter()
   	.append("svg:path")
-  	.attr("d", arc.innerRadius(function(d) { return d.maxVal * 1.2; })
-              .outerRadius(function(d) { return d.maxVal * 2; }))
+  	.attr("d", arc.innerRadius(function(d) { return d.dRank * .8; })
+              .outerRadius(function(d) { return d.dRank * 1.2; }))
   	.style("fill", function(d, i) { return fill(i); })
   	.style("stroke", function(d, i) { return d3.rgb(fill(d.value)).darker(2); })
   	.call(force.drag);
@@ -229,103 +240,8 @@
   	  .style("opacity", 1);
 
 	function tick() {
-		// nodes.attr("cx", function(d) { return d.x; })
-  // 	.attr("cy", function(d) { return d.y; });
   	nodes.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
 	}
-
-// 	data.forEach(function(d) { d.rank = 0 });
-// 	var prostitution_array = [],
-// 	alcohol_array = [],
-// 	cigarette_array = [];
-
-// 	data.forEach(function(d) { 
-// 		var p = {},
-// 		a = {},
-// 		c = {};
-
-// 		country = d.country;
-
-// 		p[country] = d.prostitution ? d.prostitution : 0;
-// 		a[country] = d.alcohol ? d.alcohol : 0;
-// 		c[country] = d.cigarettes ? d.cigarettes : 0;
-
-// 		prostitution_array.push(p);
-// 		alcohol_array.push(a);
-// 		cigarette_array.push(c);
-// 	});
-
-// 	sorter(alcohol_array);
-// 	sorter(prostitution_array);
-// 	sorter(cigarette_array);
-
-// 	function sorter(category) {
-// 		return category.sort(function(a,b) { return b[Object.keys(b)] - a[Object.keys(a)] });
-// 	};
-// 	var ranks = {};
-
-// 	for (i = 0; i<alcohol_array.length; i++) { 
-// 		var alc_key = Object.keys(alcohol_array[i]);
-// console.log(alc_key);
-// 		var prost_key = Object.keys(prostitution_array[i]);
-// 		var cig_key = Object.keys(cigarette_array[i]);
-
-// 		if (ranks[alc_key]) { 
-// 			console.log(true);
-// 			ranks[alc_key] += i; 
-// 		} else {
-// 			console.log(false);
-// 			ranks[alc_key] = i;
-// 		}
-// 		if (ranks[prost_key]) { 
-// 			ranks[prost_key] += i; 
-// 		} else {
-// 			ranks[prost_key] = i;
-// 		}
-// 		if (ranks[cig_key]) { 
-// 			ranks[cig_key] += i; 
-// 		} else {
-// 			ranks[cig_key] = i;
-// 		}
-// 	}
-// 	var countries = [];
-// 	data.forEach(function(d) {
-// 		countries.push(d.country);
-// 	});
-// 	for (i=0;i<data.length;i++){
-// 		data[i].country
-// 	}
-
-		// var nodes = data;
-		// var force = d3.layout.force()
-		// .nodes(nodes)
-		// .size([width,height])
-		// .on("tick", tick)
-		// .start();
-
-		// function tick(e) {
-		// 	console.log("he", e);
-		// }
-// console.log(countries);
-
-
-// 	var circles = svg.selectAll("circle")
-// 	.data(data)
-// 	.enter()
-// 	.append("circle");
-
-// 	circles.attr("r", function(d) { return (d.cigarettes)/100; })
-// 	.attr("fill", "blue")
-// 	.attr("cx", function(d) { return (d.cigarettes)/5; })
-// 	.attr("cy", function(d) { return d.cigarettes/10})
-// 	.transition()
-// 	.duration(2000)
-// 	.delay(2000)
-// 	.attr("fill", "red")
-// 	.attr("cx", function(d) { return (d.cigarettes)/10; })
-// 	.attr("cy", function(d) { return d.cigarettes/5; });
-
-
 
 	</script>
 
